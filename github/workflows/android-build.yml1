@@ -1,0 +1,30 @@
+name: Build APK and Move to Folder
+
+on:
+push:
+branches:
+- main
+
+jobs:
+build-apk:
+runs-on: ubuntu-latest
+steps:
+# 检出代码
+- name: Checkout Code
+uses: actions/checkout@v2
+
+# 设置 JDK 环境
+- name: Set up JDK
+uses: actions/setup-java@v1
+with:
+java-version: 11
+
+# 构建 Release APK
+- name: Build Release APK
+run: ./gradlew assembleRelease
+
+# 将生成的 APK 移动到指定文件夹
+- name: Move APK to Folder
+run: |
+mkdir -p output/apk
+mv app/build/outputs/apk/release/app-release.apk output/apk/
